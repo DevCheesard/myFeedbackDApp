@@ -18,6 +18,9 @@
     "hardhat": "^2.12.7"
   },
   "dependencies": {
-    "dotenv": "^16.0.3"
-  }
+    "dotenv": "^16.0.3",
+    "gh-pages": "^5.0.0"
+  },
+  "homepage": "https://devcheesard.github.io/myFeedbackDApp/"
+
 }

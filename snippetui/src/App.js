@@ -4,6 +4,8 @@ import './App.css';
 
 const getEthereumObject = () => window.ethereum;
 
+/*This function checks access to User's account,
+      It returns the first linked account found*/
 const findMetaMaskAccount = async () => {
   try {
     const ethereum = getEthereumObject();
@@ -16,6 +18,7 @@ const findMetaMaskAccount = async () => {
 
     console.log("We have the Ethereum object", ethereum);
     const accounts = await ethereum.request({method: "eth_accounts"});
+    // this method asks metamask to give access to user's wallet
 
     if (accounts.length !== 0) {
       const account = accounts[0];
@@ -54,6 +57,8 @@ const App = () => {
   };
 
   useEffect(() => {
+    
+    //To run function when app component is called
     findMetaMaskAccount().then((account) => {
       if (account !== null) {
         setCurrentAccount(account);
@@ -89,10 +94,10 @@ const App = () => {
         placeholder="Leave a snippet"/>
       <button className="submit" type='submit' onClick={handleClick}>Submit</button>
       {/*
-         * If there is no currentAccount render this button
+         * If there is no current Account render this button
          */}
         {!currentAccount && (
-          <button className="submit" onClick={connectWallet}>
+          <button className="connectwallet" onClick={connectWallet}>
             Connect Wallet
           </button>
         )}

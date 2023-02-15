@@ -1,21 +1,44 @@
 const main = async () => {
-    const [owner, randomPerson] = await hre.ethers.getSigners();
+    
     const SnippetsDAppContractFactory = await hre.ethers.getContractFactory("SnippetsDApp");
-    const SnippetsDAppContract = await SnippetsDAppContractFactory.deploy();
+    const SnippetsDAppContract = await SnippetsDAppContractFactory.deploy({
+      value: hre.ethers.utils.parseEther("0.1"),
+    });
     await SnippetsDAppContract.deployed();
+    console.log("Contract address:", SnippetsDAppContract.address);
 
-    console.log("Contract deployed to:", SnippetsDAppContract.address);
-    console.log("Contract deployed by:", owner.address);
+    //Get Contract balance
+  let contractBalance = await hre.ethers.provider.getBalance(
+    SnippetsDAppContract.address
+  );
+  console.log(
+    "Contract balance:",
+    hre.ethers.utils.formatEther(contractBalance)
+  );
 
-    await SnippetsDAppContract.getTotalSnippets();
+    let snippetCount;
+    snippetCount = await SnippetsDAppContract.getTotalSnippets();
+    console.log(snippetCount.toNumber());
 
-    const firstSnippetsTxn = await SnippetsDAppContract.snippet();
-    await firstSnippetsTxn.wait();
+    const snippetTxn = await SnippetsDAppContract.snippet("This is snippet #1!");
+    await snippetTxn.wait(); // wait for transaction to be mined
 
-    const secondSnippetsTxn = await SnippetsDAppContract.connect(randomPerson).snippet();
-    await secondSnippetsTxn.wait();
+    const snippetTxn2 = await SnippetsDAppContract.snippet("This is snippet #2!");
+    await snippetTxn2.wait(); // wait for transaction to be mined
 
-    await SnippetsDAppContract.getTotalSnippets();
+    const [_, randomPerson] = await hre.ethers.getSigners();
+    
+    snippetTxn = await SnippetsDAppContract.connect(randomPerson).snippet("Another message!");
+    await snippetTxn.wait(); // wait for transaction to be mined
+
+    contractBalance = await hre.ethers.provider.getBalance(waveContract.address);
+    console.log(
+    "Contract balance:",
+    hre.ethers.utils.formatEther(contractBalance)
+  );
+
+    let allSnippets = await SnippetsDAppContract.getAllSnippets();
+    console.log(allSnippets);
   };
   
   const runMain = async () => {

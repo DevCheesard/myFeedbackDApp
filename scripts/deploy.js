@@ -6,7 +6,9 @@ const main = async () => {
     console.log("Account balance: ", accountBalance.toString());
 
     const SnippetsDAppContractFactory = await hre.ethers.getContractFactory("SnippetsDApp");
-    const SnippetsDAppContract = await SnippetsDAppContractFactory.deploy();
+    const SnippetsDAppContract = await SnippetsDAppContractFactory.deploy(
+        {value: hre.ethers.utils.parseEther("0.001"),}
+    );
     await SnippetsDAppContract.deployed();
 
     console.log("SnippetsDApp address: ", SnippetsDAppContract.address)

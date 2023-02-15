@@ -1,8 +1,66 @@
-import React, {useState} from 'react'
+import { ethers } from "ethers"
+import React, {useEffect, useState} from 'react'
 import './App.css';
 
+const getEthereumObject = () => window.ethereum;
 
-function App() {
+const findMetaMaskAccount = async () => {
+  try {
+    const ethereum = getEthereumObject();
+    
+    //to make sure we have access to the ethereum object.
+    if (!ethereum) {
+      console.error("Make sure you have Metamask!")
+      return null;
+    }
+
+    console.log("We have the Ethereum object", ethereum);
+    const accounts = await ethereum.request({method: "eth_accounts"});
+
+    if (accounts.length !== 0) {
+      const account = accounts[0];
+      console.log("Found an authorized account:", account);
+      return account;
+    } else {
+      console.error("No authorized account found");
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+const App = () => {
+  const [currentAccount, setCurrentAccount] = useState("");
+
+  const connectWallet = async () => {
+    try {
+      const ethereum = getEthereumObject();
+      if (!ethereum) {
+        alert ("Get MetaMask!")
+        return;
+      }
+
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+
+      console.log("Connected", accounts[0]);
+      setCurrentAccount(accounts[0]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    findMetaMaskAccount().then((account) => {
+      if (account !== null) {
+        setCurrentAccount(account);
+      }
+    })
+  }, []);
+
   const [snippet, setSnippet] = useState('');
   const [showSnippet, setShowSnippet] = useState(false);
 
@@ -29,7 +87,16 @@ function App() {
         value={snippet}
         onChange={handleChange}
         placeholder="Leave a snippet"/>
-      <button type='submit' onClick={handleClick}>Submit</button>
+      <button className="submit" type='submit' onClick={handleClick}>Submit</button>
+      {/*
+         * If there is no currentAccount render this button
+         */}
+        {!currentAccount && (
+          <button className="submit" onClick={connectWallet}>
+            Connect Wallet
+          </button>
+        )}
+ 
       {showSnippet ? (
         <div className='feed'>
           <h2>Recent Snips</h2>
@@ -41,3 +108,4 @@ function App() {
 }
 
 export default App;
+

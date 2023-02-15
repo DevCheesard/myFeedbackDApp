@@ -1,0 +1,33 @@
+.App {
+  text-align: center;
+}
+.head {
+  font-family: 'Times New Roman', Times, serif;
+  background-color: blanchedalmond;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 600;
+}
+p {
+  text-align: center;
+  color: black;
+  margin-top: 16px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size : 1.2rem
+}
+input {
+  border-radius: 20px;
+  outline: none;
+  padding: 10px;
+  width: 40%
+}
+.feed {
+  margin-top: 30px;
+  background: blanchedalmond;
+  min-height: 300px;
+  
+}
+
+.snips {
+  list-style-type: circle; ;
+}
